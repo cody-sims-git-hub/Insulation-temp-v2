@@ -104,6 +104,18 @@ export function Footer() {
           </p>
           <p className="text-sm text-muted-foreground">Licensed &amp; Insured · Free Estimates</p>
         </div>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          Powered by{" "}
+          <a
+            href="https://simsdigitalpartners.com"
+            target="_blank"
+            rel="noopener"
+            className="font-medium underline underline-offset-4 hover:text-primary transition-colors"
+          >
+            Sims Digital Partners
+          </a>
+        </p>
       </div>
     </footer>
   )

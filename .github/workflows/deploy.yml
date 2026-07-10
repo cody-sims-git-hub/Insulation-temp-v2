@@ -67,10 +67,12 @@ jobs:
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          # --delete mirrors the build; exclude .well-known so host-managed ACME /
-          # SSL files survive, and preview-sites/ so any client preview subdomains
-          # served from public_html/preview-sites/<slug> survive production deploys.
-          rsync -az --delete --exclude='.well-known/' --exclude='preview-sites/' \
+          # Deploy target is the preview subdomain aplus2.simsdigitalpartners.com,
+          # served from public_html/preview-sites/aplus2/. --delete mirrors the
+          # build; exclude .well-known so host-managed ACME/SSL files survive.
+          # (When this site goes live on its own domain, repoint this to
+          #  domains/<domain>/public_html/.)
+          rsync -az --delete --exclude='.well-known/' \
             -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
             ./out/ \
-            "$SSH_USER@$SSH_HOST:domains/aplusinsulation.com/public_html/"
+            "$SSH_USER@$SSH_HOST:domains/simsdigitalpartners.com/public_html/preview-sites/aplus2/"
