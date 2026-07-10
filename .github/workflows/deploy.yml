@@ -1,0 +1,76 @@
+# =============================================================================
+#  Hostinger static-site deploy — GitHub Actions (SFTP/rsync over SSH)
+#  Generated from ~/workspace/deploy-playbook/deploy.yml.template
+#
+#  Placeholders substituted by setup-deploy.sh (or fill in by hand). Tokens are
+#  wrapped in double braces in the body below; documented here without braces so
+#  they are not themselves substituted:
+#    BUILD_CMD      build command            e.g. npm run build
+#    BUILD_OUTPUT   static output dir        e.g. build/client | dist | out
+#    DOMAIN         live domain folder       e.g. example.com
+#    NODE_VERSION   node major version       e.g. 22
+#    BUILD_ENV      build-time env lines (omitted if none)
+#
+#  Requires ONE repo secret: SSH_PRIVATE_KEY (the shared Hostinger deploy key).
+#  Host / port / user are the shared managed server — not sensitive, so inline.
+# =============================================================================
+name: Deploy to Hostinger
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**", "LICENSE"]
+  pull_request:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**", "LICENSE"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Lightweight gates — runs on PRs AND main pushes (no build here).
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm audit --omit=dev --audit-level=critical
+
+  # Build + publish to Hostinger — main push ONLY, never PRs or branches.
+  deploy:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Build site
+        run: npm run build
+      # Publish over SFTP (SSH) rather than plain FTP/FTPS — Hostinger's FTP
+      # control socket times out intermittently from GitHub runners, whereas SSH
+      # on port 65002 is reliable. rsync --delete keeps the docroot an exact
+      # mirror of the build output (no stale files, no sync-state file).
+      - name: Deploy build to Hostinger over SFTP
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: "5.183.10.166"
+          SSH_PORT: "65002"
+          SSH_USER: "u811108183"
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # --delete mirrors the build; exclude .well-known so host-managed ACME /
+          # SSL files survive, and preview-sites/ so any client preview subdomains
+          # served from public_html/preview-sites/<slug> survive production deploys.
+          rsync -az --delete --exclude='.well-known/' --exclude='preview-sites/' \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
+            ./out/ \
+            "$SSH_USER@$SSH_HOST:domains/aplusinsulation.com/public_html/"
