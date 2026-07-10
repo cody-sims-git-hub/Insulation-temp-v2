@@ -36,9 +36,6 @@ Then open **http://localhost:3000** in your browser.
 Set the site's production URL — it's used for canonical tags, `sitemap.xml`, `robots.txt`,
 and structured data. Copy `.env.example` to `.env.local` and set:
 
-```bash
-NEXT_PUBLIC_SITE_URL=https://www.aplusinsulation.com
-```
 
 ## Tech stack
 
