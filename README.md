@@ -42,3 +42,7 @@ and structured data. Copy `.env.example` to `.env.local` and set:
 - **Framework:** Next.js 16 (App Router)
 - **UI:** React 19, Tailwind CSS v4, shadcn/ui, lucide-react
 - **SEO:** per-page metadata + canonicals, JSON-LD structured data, generated sitemap & robots
+
+## Preview
+
+![A Plus Insulation home page](docs/screenshot-home.jpg)
