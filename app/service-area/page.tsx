@@ -14,7 +14,7 @@ import { MapPin, Phone, CheckCircle2 } from "lucide-react"
 export const metadata: Metadata = {
   title: "Service Area — Gulf Coast & FL Panhandle",
   description:
-    "A Plus Insulation serves Panama City, Panama City Beach, Destin, Fort Walton Beach, Pensacola and communities across the Florida Panhandle & Gulf Coast. See if we cover you.",
+    "A Plus Insulation serves Panama City, Destin, Fort Walton Beach, Pensacola and communities across the Florida Panhandle & Gulf Coast — plus nearby Alabama & Georgia towns like Dothan and Bainbridge. See if we cover you.",
   alternates: { canonical: "/service-area" },
 }
 
@@ -30,6 +30,10 @@ const regions = [
   {
     name: "Panama City Area",
     cities: ["Panama City", "Panama City Beach", "Lynn Haven", "Callaway", "Santa Rosa Beach", "Freeport"],
+  },
+  {
+    name: "Alabama & Georgia",
+    cities: ["Dothan, AL", "Enterprise, AL", "Ozark, AL", "Geneva, AL", "Bainbridge, GA", "Donalsonville, GA", "Colquitt, GA"],
   },
 ]
 
@@ -86,8 +90,8 @@ export default function ServiceAreaPage() {
                 Local crews, quick response
               </h2>
               <p className="text-lg text-muted-foreground mb-6 text-pretty">
-                We cover communities across Northwest Florida&apos;s 850 region. Not sure if you&apos;re in our zone?
-                Reach out — if we can help, we will.
+                We cover communities across Northwest Florida&apos;s 850 region, plus nearby towns across the
+                Alabama and Georgia state lines. Not sure if you&apos;re in our zone? Reach out — if we can help, we will.
               </p>
               <ul className="space-y-3 mb-8">
                 {highlights.map((item) => (
@@ -118,10 +122,10 @@ export default function ServiceAreaPage() {
           <div className="max-w-3xl mb-14">
             <span className="text-sm uppercase tracking-widest text-primary font-semibold">Communities We Serve</span>
             <h2 className="font-heading uppercase text-3xl md:text-5xl text-foreground mt-4 text-balance leading-tight">
-              Towns across the coast
+              Towns across the coast &amp; state line
             </h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {regions.map((region) => (
               <div key={region.name} className="p-6 rounded-xl bg-background border border-border">
                 <h3 className="font-heading uppercase tracking-wide text-xl text-primary mb-5">{region.name}</h3>

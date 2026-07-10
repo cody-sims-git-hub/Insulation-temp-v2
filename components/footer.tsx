@@ -25,11 +25,8 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <img src="/aplus-logo.jpg" alt="A Plus Insulation logo" className="h-11 w-11 rounded-md object-cover" />
-              <span className="font-heading uppercase tracking-wide text-lg leading-none">
-                <span className="text-primary">A Plus</span> <span className="text-secondary">Insulation</span>
-              </span>
+            <Link href="/" className="inline-flex items-center mb-4" aria-label="A Plus Insulation — home">
+              <img src="/aplus-logo-cropped.jpg" alt="A Plus Insulation" className="h-12 w-auto rounded-md object-contain" />
             </Link>
             <p className="text-muted-foreground text-sm mb-5 max-w-xs">
               For all your insulation needs. Reduce your power bills with professional insulation across the Gulf Coast.

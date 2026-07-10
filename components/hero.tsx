@@ -60,7 +60,7 @@ export function Hero() {
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">
-                <span className="font-heading text-2xl text-primary">15+</span> years in business
+                <span className="font-heading text-2xl text-primary">20+</span> years in business
               </div>
               <div className="text-sm text-muted-foreground">
                 <span className="font-heading text-2xl text-primary">2,000+</span> homes insulated
