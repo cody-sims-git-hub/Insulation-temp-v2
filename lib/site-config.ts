@@ -1,8 +1,10 @@
 // Central business (NAP) + SEO config. Single source of truth for metadata and
-// structured data across the site. Override the production URL by setting
-// NEXT_PUBLIC_SITE_URL (e.g. https://www.aplusinsulation.com).
+// structured data across the site. This drives canonical + Open Graph / share
+// previews, so it must match where the site is actually served. It currently
+// lives on the aplus2 preview subdomain; when it goes live on its own domain,
+// set NEXT_PUBLIC_SITE_URL (e.g. https://www.aplusinsulation.com) or update this.
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://aplusinsulation.com").replace(/\/$/, "")
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://aplus2.simsdigitalpartners.com").replace(/\/$/, "")
 
 export const business = {
   name: "A Plus Insulation",
