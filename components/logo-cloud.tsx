@@ -4,7 +4,7 @@ const items = [
   { icon: BadgeCheck, title: "Licensed & Insured", text: "Fully certified insulation crews" },
   { icon: PiggyBank, title: "Free Estimates", text: "No-cost, no-obligation quotes" },
   { icon: Clock, title: "Fast Turnaround", text: "Most jobs done in a day" },
-  { icon: MapPin, title: "Gulf Coast Local", text: "Serving the panhandle for 15+ years" },
+  { icon: MapPin, title: "Gulf Coast Local", text: "Serving the panhandle for 20+ years" },
 ]
 
 export function LogoCloud() {

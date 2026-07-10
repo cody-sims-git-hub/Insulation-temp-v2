@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A Plus Insulation">
+  <rect width="64" height="64" rx="13" fill="#000000"/>
+  <g fill="none" stroke="#a1d322" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 53 L32 12 L51 53"/>
+    <path d="M21.5 41 L42.5 41"/>
+  </g>
+</svg>

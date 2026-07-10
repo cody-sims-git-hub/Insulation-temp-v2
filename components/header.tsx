@@ -22,9 +22,9 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label="A Plus Insulation — home">
             <img
-              src="/aplus-logo.jpg"
+              src="/aplus-logo-cropped.jpg"
               alt="A Plus Insulation"
-              className="h-12 w-auto md:h-14 rounded-md object-contain"
+              className="h-11 w-auto md:h-14 rounded-md object-contain"
             />
           </Link>
 

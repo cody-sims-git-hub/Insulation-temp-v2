@@ -40,20 +40,27 @@ export const metadata: Metadata = {
     title: "A Plus Insulation | Spray Foam & Insulation, Panama City FL",
     description:
       "Spray foam, blown-in, and batt insulation done right the first time. Serving Panama City and the Florida Gulf Coast. Free estimates.",
-    images: [{ url: business.image, width: 960, height: 695, alt: "A Plus Insulation service trucks on the Gulf Coast" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "A Plus Insulation service trucks on the Gulf Coast" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "A Plus Insulation | Spray Foam & Insulation, Panama City FL",
     description: "Spray foam, blown-in, and batt insulation across Panama City and the Florida Gulf Coast. Free estimates.",
-    images: [business.image],
+    images: ["/og.jpg"],
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
   },
-  icons: { icon: "/icon.svg", apple: "/apple-icon.png" },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: "/apple-icon.png",
+  },
   other: {
     "geo.region": "US-FL",
     "geo.placename": "Panama City",

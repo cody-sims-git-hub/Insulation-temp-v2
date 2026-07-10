@@ -14,7 +14,7 @@ export const business = {
   logo: `${SITE_URL}/aplus-logo.jpg`,
   image: `${SITE_URL}/aplus-hero-trucks.jpg`,
   priceRange: "$$",
-  foundingYearsInBusiness: "15+",
+  foundingYearsInBusiness: "20+",
   // Service-area business anchored in Panama City, FL (Bay County).
   baseCity: "Panama City",
   region: "FL",
@@ -40,6 +40,14 @@ export const business = {
     "Milton",
     "Pace",
     "Cantonment",
+    // Across the state line — Alabama & Georgia
+    "Dothan",
+    "Enterprise",
+    "Ozark",
+    "Geneva",
+    "Bainbridge",
+    "Donalsonville",
+    "Colquitt",
   ],
   services: [
     "Spray Foam Insulation",

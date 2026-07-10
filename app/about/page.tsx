@@ -14,12 +14,12 @@ import { ShieldCheck, Users, ThumbsUp, Clock, Award, Leaf } from "lucide-react"
 export const metadata: Metadata = {
   title: "About Our Gulf Coast Insulation Team",
   description:
-    "A Plus Insulation is a locally owned, licensed and insured insulation contractor serving Panama City and the Florida Panhandle for 15+ years. Meet our team and values.",
+    "A Plus Insulation is a locally owned, licensed and insured insulation contractor serving Panama City and the Florida Panhandle for 20+ years. Meet our team and values.",
   alternates: { canonical: "/about" },
 }
 
 const stats = [
-  { value: "15+", label: "Years in business" },
+  { value: "20+", label: "Years in business" },
   { value: "2,500+", label: "Homes insulated" },
   { value: "100%", label: "Licensed & insured" },
   { value: "5★", label: "Average review" },
