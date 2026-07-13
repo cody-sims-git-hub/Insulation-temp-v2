@@ -1,0 +1,128 @@
+---
+import Icon from "@/components/Icon.astro";
+import Button from "@/components/ui/Button.astro";
+
+const services = [
+  "Spray Foam",
+  "Blown Fiberglass",
+  "Mobile Home Insulation",
+  "Wall Spray Cellulose",
+  "Blown Cellulose",
+  "Roll & Batt",
+  "Garage Doors",
+  "Other",
+]
+---
+
+<section id="estimate" class="py-20 md:py-28 bg-card border-t border-border">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      {/* Copy */}
+      <div>
+        <h2 class="font-heading uppercase text-3xl md:text-5xl text-foreground mb-5 text-balance leading-tight">
+          Get your <span class="text-primary">free estimate</span> today
+        </h2>
+        <p class="text-lg text-muted-foreground mb-8 text-pretty">
+          Tell us about your project and we&apos;ll get back to you fast with a no-obligation quote. Prefer to talk?
+          Give us a call — we&apos;re happy to help.
+        </p>
+        <a
+          href="tel:8502092636"
+          class="inline-flex items-center gap-3 rounded-xl bg-secondary text-secondary-foreground px-6 py-4"
+        >
+          <Icon name="phone" class="w-6 h-6" />
+          <span>
+            <span class="block text-xs font-semibold uppercase tracking-wide">Call for fastest service</span>
+            <span class="font-heading text-2xl leading-none">850-209-2636</span>
+          </span>
+        </a>
+      </div>
+
+      {/* Form */}
+      <div class="bg-background border border-border rounded-2xl p-6 md:p-8">
+        <div id="cta-success" class="hidden text-center py-12">
+          <div class="w-14 h-14 mx-auto rounded-full bg-primary flex items-center justify-center mb-5">
+            <Icon name="check" class="w-7 h-7 text-primary-foreground" />
+          </div>
+          <h3 class="font-heading uppercase text-2xl text-foreground mb-2">Request received</h3>
+          <p class="text-muted-foreground">
+            Thanks! A member of the A Plus Insulation team will reach out shortly to schedule your free estimate.
+          </p>
+        </div>
+
+        <form id="cta-form" class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-foreground mb-1.5">
+                Full name
+              </label>
+              <input
+                id="name"
+                type="text"
+                required
+                class="w-full rounded-md border border-input bg-card px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                placeholder="John Smith"
+              />
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-foreground mb-1.5">
+                Phone
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                required
+                class="w-full rounded-md border border-input bg-card px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                placeholder="(850) 000-0000"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="service" class="block text-sm font-medium text-foreground mb-1.5">
+              Service needed
+            </label>
+            <select
+              id="service"
+              class="w-full rounded-md border border-input bg-card px-3 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              {services.map((service) => (
+                <option>{service}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label for="details" class="block text-sm font-medium text-foreground mb-1.5">
+              Project details
+            </label>
+            <textarea
+              id="details"
+              rows={3}
+              class="w-full rounded-md border border-input bg-card px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+              placeholder="Tell us about your home and what you're looking for..."
+            ></textarea>
+          </div>
+          <Button
+            type="submit"
+            size="lg"
+            class="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md py-6 font-semibold uppercase tracking-wide"
+          >
+            Request Free Estimate
+          </Button>
+          <p class="text-xs text-muted-foreground text-center">
+            No cost, no obligation. We&apos;ll never share your information.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const ctaForm = document.getElementById('cta-form');
+  const ctaSuccess = document.getElementById('cta-success');
+  ctaForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    ctaForm.classList.add('hidden');
+    ctaSuccess?.classList.remove('hidden');
+  });
+</script>
