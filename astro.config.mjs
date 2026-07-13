@@ -8,6 +8,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://aplus2.simsdigitalpartners.com',
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      // @ts-expect-error — vite type-version skew (astro-bundled vite vs @tailwindcss/vite peer)
+      tailwindcss(),
+    ],
   },
 });
