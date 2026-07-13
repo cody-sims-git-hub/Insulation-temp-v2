@@ -1,0 +1,145 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import PageHero from '@/components/PageHero.astro';
+import FAQ from '@/components/FAQ.astro';
+import CTA from '@/components/CTA.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { serviceAreaFaqs } from '@/data/faqs';
+
+const regions = [
+  {
+    name: "Pensacola Area",
+    cities: ["Pensacola", "Pensacola Beach", "Gulf Breeze", "Milton", "Pace", "Cantonment"],
+  },
+  {
+    name: "Emerald Coast",
+    cities: ["Destin", "Fort Walton Beach", "Navarre", "Miramar Beach", "Niceville", "Crestview"],
+  },
+  {
+    name: "Panama City Area",
+    cities: ["Panama City", "Panama City Beach", "Lynn Haven", "Callaway", "Santa Rosa Beach", "Freeport"],
+  },
+  {
+    name: "Alabama & Georgia",
+    cities: ["Dothan, AL", "Enterprise, AL", "Ozark, AL", "Geneva, AL", "Bainbridge, GA", "Donalsonville, GA", "Colquitt, GA"],
+  },
+]
+
+const highlights = [
+  "Free on-site estimates throughout the coverage area",
+  "Residential, mobile home & commercial projects",
+  "New construction and retrofit insulation",
+  "Fully equipped crews and branded service trucks",
+]
+---
+
+<Layout
+  title="Service Area — Gulf Coast & FL Panhandle"
+  description="A Plus Insulation serves Panama City, Destin, Fort Walton Beach, Pensacola and communities across the Florida Panhandle & Gulf Coast — plus nearby Alabama & Georgia towns like Dothan and Bainbridge. See if we cover you."
+>
+  <div class="min-h-screen bg-background">
+    <Header />
+    <main>
+    <PageHero
+      eyebrow="service-area"
+      title={'Serving the <span class="text-primary">Gulf Coast</span> &amp; Panhandle'}
+      description="Based on the Gulf Coast, A Plus Insulation travels throughout Northwest Florida to keep homes comfortable and power bills low. If you're nearby, give us a call."
+    />
+
+    {/* Map + coverage */}
+    <section class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div class="overflow-hidden rounded-2xl border border-border">
+            <iframe
+              title="A Plus Insulation service area map covering the Florida Panhandle"
+              src="https://www.google.com/maps?q=Florida%20Panhandle%20Gulf%20Coast&output=embed"
+              class="w-full h-80 md:h-[28rem] border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <div>
+            <div class="inline-flex items-center gap-2 mb-4">
+              <Icon name="map-pin" class="w-4 h-4 text-primary" />
+              <span class="text-sm uppercase tracking-widest text-primary font-semibold">Coverage Area</span>
+            </div>
+            <h2 class="font-heading uppercase text-3xl md:text-4xl text-foreground mb-5 text-balance leading-tight">
+              Local crews, quick response
+            </h2>
+            <p class="text-lg text-muted-foreground mb-6 text-pretty">
+              We cover communities across Northwest Florida&apos;s 850 region, plus nearby towns across the
+              Alabama and Georgia state lines. Not sure if you&apos;re in our zone? Reach out — if we can help, we will.
+            </p>
+            <ul class="space-y-3 mb-8">
+              {highlights.map((item) => (
+                <li class="flex items-start gap-3">
+                  <Icon name="check-circle-2" class="h-5 w-5 shrink-0 text-primary mt-0.5" />
+                  <span class="text-foreground">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="tel:8502092636"
+              class="inline-flex items-center gap-3 rounded-xl bg-secondary text-secondary-foreground px-6 py-4"
+            >
+              <Icon name="phone" class="w-6 h-6" />
+              <span>
+                <span class="block text-xs font-semibold uppercase tracking-wide">Check availability</span>
+                <span class="font-heading text-2xl leading-none">850-209-2636</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Cities */}
+    <section class="border-t border-border bg-card py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <span class="text-sm uppercase tracking-widest text-primary font-semibold">Communities We Serve</span>
+          <h2 class="font-heading uppercase text-3xl md:text-5xl text-foreground mt-4 text-balance leading-tight">
+            Towns across the coast &amp; state line
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {regions.map((region) => (
+            <div class="p-6 rounded-xl bg-background border border-border">
+              <h3 class="font-heading uppercase tracking-wide text-xl text-primary mb-5">{region.name}</h3>
+              <ul class="space-y-3">
+                {region.cities.map((city) => (
+                  <li class="flex items-center gap-3 text-foreground">
+                    <Icon name="map-pin" class="h-4 w-4 shrink-0 text-primary" />
+                    {city}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div class="mt-12 text-center">
+          <p class="text-muted-foreground mb-6 text-pretty">
+            Don&apos;t see your town? We regularly travel beyond these areas — just ask.
+          </p>
+          <Button
+            href="/contact"
+            size="lg"
+            class="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-8 py-6 font-semibold uppercase tracking-wide"
+          >
+            Request Service
+          </Button>
+        </div>
+      </div>
+    </section>
+
+    <FAQ faqs={serviceAreaFaqs} heading="Service area FAQs" />
+
+    <CTA />
+    </main>
+    <Footer />
+  </div>
+</Layout>
