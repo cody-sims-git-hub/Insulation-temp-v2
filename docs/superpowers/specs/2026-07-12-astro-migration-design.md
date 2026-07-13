@@ -29,27 +29,37 @@ placeholders.
 - No working form backend. No analytics. No indexing.
 - No new pages, routes, or features.
 
-## Reference pattern (authoritative)
+## Reference pattern
 
-Mirror `cody-sims-git-hub/osaka-hibachi-site` — "static Astro/Tailwind/shadcn"
-SDP portfolio build. Same stack this site already uses (Tailwind v4 + shadcn),
-so the port is mechanical.
+`cody-sims-git-hub/osaka-hibachi-site` is the reference for the **SDP Astro
+conventions only** — project layout, config style, tsconfig, and the Hostinger
+deploy flow. It is a **separate project**; its design choices (shadcn Sheet mobile
+menu, React island for nav, its color tokens) are **not** imposed here. This
+project keeps its own design and requirements.
+
+Adopted conventions:
 
 - Astro 5, `"type": "module"`
-- `@astrojs/react` for React islands; `@tailwindcss/vite` for Tailwind v4
-  (CSS-first, **no** `postcss.config` / `tailwind.config` / `autoprefixer`)
-- `.astro` components for static markup; `.tsx` **only** for interactive islands
-- `src/data/site.ts` = content source of truth
+- `@tailwindcss/vite` for Tailwind v4 (CSS-first, **no** `postcss.config` /
+  `tailwind.config` / `autoprefixer`)
+- `src/data/*` = content source of truth
 - `src/layouts/Layout.astro` = `<head>` + global scripts
 - `tsconfig.json` extends `astro/tsconfigs/strict`, `@/*` → `src/*`
 - Deploy: GitHub Actions → validate (`astro check` + `npm audit`) on PR; on main
   push, `rsync ./dist/` over SFTP to Hostinger.
 
+**Deliberate divergence from osaka: no React.** This site's only interactivity is
+three trivial show/hide DOM toggles (mobile menu, contact-form success, FAQ). None
+needs a framework, so we omit `@astrojs/react`, React, Radix, and `lucide-react`
+entirely. Every component becomes `.astro`; toggles use small inline `<script>`s;
+Lucide icons are reproduced as inline SVG. Simplest protocol, near-zero JS, and
+still pixel-perfect because the rendered markup and class strings are identical.
+
 ## Target structure
 
 ```
 astro.config.mjs          site: https://aplus2.simsdigitalpartners.com
-                          integrations: [react()], vite: { plugins: [tailwindcss()] }
+                          integrations: [], vite: { plugins: [tailwindcss()] }
 tsconfig.json             extends astro/tsconfigs/strict; @/* → src/*
 package.json              "type":"module"; scripts: dev/build/preview/typecheck(astro check)
 src/
@@ -57,12 +67,12 @@ src/
   data/
     site.ts               ← lib/site-config.ts business/NAP block (verbatim values)
     faqs.ts               ← lib/faqs.ts (verbatim)
-  lib/utils.ts            cn()  (← lib/utils.ts)
   styles/global.css       ← app/globals.css VERBATIM (Tailwind v4 @theme tokens,
                           fonts, .btn/utility layers)
   components/
-    Header.astro          ← components/header.tsx (static shell)
-    MobileNav.tsx         island — shadcn Sheet (the header's mobile menu)
+    Icon.astro            inline-SVG icon (reproduces the used Lucide glyphs by name)
+    Header.astro          ← components/header.tsx — static markup + inline <script>
+                            reproducing the current inline mobile-menu dropdown toggle
     Footer.astro          ← components/footer.tsx
     Hero.astro            ← components/hero.tsx
     PageHero.astro        ← components/page-hero.tsx
@@ -73,9 +83,9 @@ src/
     Testimonials.astro    ← components/testimonials.tsx (render static; see below)
     CTA.astro             ← components/cta.tsx (render static; see below)
     FAQ.astro             ← components/faq.tsx, converted to native <details>
-    ContactForm.tsx       island — submit/success state (behavior unchanged)
-    ui/sheet.tsx          only shadcn primitives the islands need
-    ui/dialog.tsx         (Sheet dependency)
+    ContactForm.astro     ← components/contact-form.tsx — form + inline <script>
+                            for the fake submit/success swap (behavior unchanged)
+    JsonLd — dropped (see SEO)
   pages/
     index.astro           ← app/page.tsx
     about.astro           ← app/about/page.tsx
@@ -87,24 +97,35 @@ public/                   all current assets (images, favicons, og.jpg) unchange
 .github/workflows/deploy.yml   updated: astro check + rsync ./dist/
 ```
 
-## Interactivity (minimal JS)
+Note: `lib/utils.ts` (`cn()`) is dropped — it exists for React `className`
+merging; static `.astro` markup uses literal class strings. No `shadcn/ui`
+component files carry over; the handful actually used (Button, etc.) are
+reproduced as plain HTML elements with their exact current class strings.
 
-Today the whole app hydrates React to power a menu and a form. After migration,
-only two small islands ship JS:
+## Interactivity (no framework, near-zero JS)
+
+The whole app currently hydrates React to power a menu, a form, and an accordion.
+After migration there is **no React runtime** — three tiny vanilla scripts, and
+one native element:
 
 | Piece | Current | Astro |
 |-------|---------|-------|
-| Mobile menu | `header.tsx` `useState` | `MobileNav.tsx` shadcn **Sheet** island, `client:load` |
-| Contact form | `contact-form.tsx` `useState` | `ContactForm.tsx` island, `client:visible` — unchanged fake-success behavior |
+| Mobile menu | `header.tsx` `useState` | `Header.astro` — reproduce the **current inline dropdown** markup; toggle open/closed via a small inline `<script>` (show/hide + swap Menu/X icon) |
+| Contact form | `contact-form.tsx` `useState` | `ContactForm.astro` — inline `<script>` on submit: `preventDefault`, hide form, show the existing "Message sent" panel. Submits nowhere (unchanged). |
 | FAQ accordion | `faq.tsx` `useState` | **native `<details>`/`<summary>`** in `FAQ.astro` — zero JS |
 | Testimonials | `testimonials.tsx` (client) | static `Testimonials.astro` — interactivity is decorative; render static |
 | CTA | `cta.tsx` (client) | static `CTA.astro` — render static |
 
-FAQ open/closed styling is reproduced with `<details open>` on the first item and
-CSS (`details[open]` + marker rotation) to match the current chevron/expand look
-pixel-for-pixel. If any Testimonials/CTA interactivity turns out to be
-load-bearing (not just decorative) during the port, it becomes a small
-`client:visible` island rather than a redesign.
+- **Icons:** current components import `lucide-react`. With no React, the used
+  glyphs (Menu, X, Phone, Check, ChevronDown, ShieldCheck, Users, ThumbsUp, Clock,
+  Award, Leaf, MapPin, Mail, CheckCircle2, etc.) are reproduced as **inline SVG**
+  via `Icon.astro`, copying Lucide's exact path data so they render identically.
+- **FAQ** open/closed styling is reproduced with `<details open>` on the first
+  item plus CSS (`details[open]` marker rotation) to match the current
+  chevron/expand look pixel-for-pixel.
+- If any Testimonials/CTA interactivity turns out to be load-bearing (not just
+  decorative) during the port, it gets the same tiny-inline-script treatment — not
+  a React island, and not a redesign.
 
 ## SEO / head (placeholder, simplest)
 
@@ -130,13 +151,16 @@ osaka). Wire to the same CSS variables `global.css` already declares
 
 ## Dependencies
 
-**Add:** `astro`, `@astrojs/react`, `@astrojs/check`, `@tailwindcss/vite`,
-`tailwindcss` v4, `react`, `react-dom`, `@radix-ui/react-dialog`, `clsx`,
-`tailwind-merge`, `class-variance-authority`, `lucide-react`.
+**Add (that's all):** `astro`, `@astrojs/check`, `@tailwindcss/vite`,
+`tailwindcss` v4, `typescript`, `@types/node`.
 
-**Remove:** `next`, `next-themes`, `@vercel/analytics`, `autoprefixer`, `postcss`,
-`@tailwindcss/postcss`, and all unused `@radix-ui/*` / shadcn packages (~45).
-Keep only what the two islands import.
+**Remove:** `next`, `next-themes`, `@vercel/analytics`, `react`, `react-dom`,
+`@astrojs/react` (never added), `lucide-react`, `autoprefixer`, `postcss`,
+`@tailwindcss/postcss`, `clsx`, `tailwind-merge`, `class-variance-authority`,
+`@hookform/resolvers`, `react-hook-form`, `zod`, and **all** `@radix-ui/*` /
+shadcn packages (~50 total). Nothing React-related remains.
+
+This is a near-total dependency wipe: from ~60 packages to ~6.
 
 ## Deploy (unchanged target, new output dir)
 
@@ -154,20 +178,23 @@ Node 22, `npm ci`, `npm audit --omit=dev --audit-level=critical` stay as-is.
 2. Visual diff each of the 5 pages against the current build at mobile + desktop
    widths — must be pixel-identical (hero, header/menu, cards, FAQ, footer,
    contact form states).
-3. View-source confirms only `MobileNav` + `ContactForm` ship JS; FAQ is native
-   `<details>`.
+3. View-source confirms **no framework runtime** ships — only the small inline
+   toggle scripts; FAQ is native `<details>`.
 4. Confirm `<meta robots noindex,nofollow>` on every page and `public/robots.txt`
    present in `dist/`.
-5. Confirm favicons, `og.jpg`, and all images resolve.
+5. Confirm favicons, `og.jpg`, and all images resolve; all inline SVG icons match
+   the current Lucide glyphs.
 
 ## Risks / notes
 
 - **Tailwind v4 token parity** is the pixel-perfect linchpin: `global.css` must be
   copied verbatim, including `@theme` tokens, custom utilities, and font-variable
   wiring. Diff the compiled CSS if anything looks off.
-- Radix Sheet markup/animation should match the current mobile menu closely; if
-  the exact current slide/overlay differs, match the current design (priority 1),
-  not osaka's.
+- **Icon fidelity:** inline SVGs must use Lucide's exact path data / viewBox /
+  stroke settings so glyphs are identical to the current `lucide-react` output.
+- **Mobile menu:** reproduce **this site's current inline dropdown** exactly (not
+  osaka's Sheet). The vanilla toggle must reproduce the existing open/close markup
+  and the Menu↔X icon swap.
 - `next/font` self-hosts and avoids layout shift; the Google Fonts `<link>` adds
-  one external request. Acceptable for a demo; noted as the one intentional
-  fidelity trade for simplicity.
+  one external request. Acceptable for a demo; the one intentional fidelity trade
+  for simplicity.
