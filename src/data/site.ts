@@ -9,9 +9,9 @@ export const SITE_URL = "https://aplus2.simsdigitalpartners.com"
 export const business = {
   name: "A Plus Insulation",
   tagline: "For all your insulation needs",
-  phone: "+18502092636",
-  phoneDisplay: "850-209-2636",
-  email: "info@aplusinsulation.com",
+  phone: "+18505550199",
+  phoneDisplay: "850-555-0199",
+  email: "info@example.com",
   url: SITE_URL,
   logo: `${SITE_URL}/aplus-logo.jpg`,
   image: `${SITE_URL}/aplus-hero-trucks.jpg`,
@@ -22,7 +22,7 @@ export const business = {
   region: "FL",
   regionName: "Florida",
   geo: { lat: 30.1588, lng: -85.6602 },
-  sameAs: ["https://www.facebook.com/profile.php?id=100063585459578"],
+  sameAs: [],
   areasServed: [
     "Panama City",
     "Panama City Beach",

@@ -18,7 +18,7 @@ export const homeFaqs: FaqItem[] = [
   {
     question: "How much does insulation cost?",
     answer:
-      "Cost depends on the type of insulation, the size and condition of the space, and how much prep or removal is needed. Because every home is different, we give you a free, detailed, no-pressure estimate up front so there are no surprises — call 850-209-2636 to get yours.",
+      "Cost depends on the type of insulation, the size and condition of the space, and how much prep or removal is needed. Because every home is different, we give you a free, detailed, no-pressure estimate up front so there are no surprises — call 850-555-0199 to get yours.",
   },
   {
     question: "Can new insulation really lower my power bill?",
@@ -33,7 +33,7 @@ export const homeFaqs: FaqItem[] = [
   {
     question: "What areas do you serve?",
     answer:
-      "We serve homeowners and builders across the Florida Panhandle and Gulf Coast — Panama City, Panama City Beach, Destin, Fort Walton Beach, Pensacola, and surrounding communities in the 850 region. Call 850-209-2636 to confirm we cover your location.",
+      "We serve homeowners and builders across the Florida Panhandle and Gulf Coast — Panama City, Panama City Beach, Destin, Fort Walton Beach, Pensacola, and surrounding communities in the 850 region. Call 850-555-0199 to confirm we cover your location.",
   },
 ]
 
@@ -112,7 +112,7 @@ export const serviceAreaFaqs: FaqItem[] = [
   {
     question: "Do you travel outside your listed service area?",
     answer:
-      "Often, yes. We regularly travel beyond our core coverage area for larger projects and new construction. If you don't see your town listed, just call 850-209-2636 and ask — if we can help, we will.",
+      "Often, yes. We regularly travel beyond our core coverage area for larger projects and new construction. If you don't see your town listed, just call 850-555-0199 and ask — if we can help, we will.",
   },
   {
     question: "Do you insulate new construction across the Panhandle?",
@@ -130,7 +130,7 @@ export const contactFaqs: FaqItem[] = [
   {
     question: "How do I get a free estimate?",
     answer:
-      "Call or text us at 850-209-2636, or send a message through the form on this page. Tell us a bit about your home and what you're looking for, and we'll get right back to you to schedule a free, no-obligation estimate.",
+      "Call or text us at 850-555-0199, or send a message through the form on this page. Tell us a bit about your home and what you're looking for, and we'll get right back to you to schedule a free, no-obligation estimate.",
   },
   {
     question: "Is the estimate really free?",
@@ -140,7 +140,7 @@ export const contactFaqs: FaqItem[] = [
   {
     question: "How soon will you get back to me?",
     answer:
-      "We respond as quickly as we can during business hours (Mon–Fri 7am–6pm, Sat 8am–2pm). For the fastest service, give us a call at 850-209-2636.",
+      "We respond as quickly as we can during business hours (Mon–Fri 7am–6pm, Sat 8am–2pm). For the fastest service, give us a call at 850-555-0199.",
   },
   {
     question: "What information should I have ready?",
