@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const DEFAULT_TITLE = 'A Plus Insulation | Spray Foam & Insulation, Panama City FL';
+const DEFAULT_DESC =
+  'A Plus Insulation installs spray foam, blown-in fiberglass, cellulose & batt insulation across Panama City and the Florida Gulf Coast. Free estimates — call 850-209-2636.';
+
+const { title, description = DEFAULT_DESC } = Astro.props;
+const fullTitle = title ? `${title} | A Plus Insulation` : DEFAULT_TITLE;
+---
+
+<!doctype html>
+<html lang="en" class="bg-background">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <!-- Portfolio/demo build — keep it out of search indexes. -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/og.jpg" />
+  </head>
+  <body class="font-sans antialiased">
+    <slot />
+  </body>
+</html>
