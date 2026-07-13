@@ -74,5 +74,5 @@ jobs:
           #  domains/<domain>/public_html/.)
           rsync -az --delete --exclude='.well-known/' \
             -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
-            ./out/ \
+            ./dist/ \
             "$SSH_USER@$SSH_HOST:domains/simsdigitalpartners.com/public_html/preview-sites/aplus2/"
