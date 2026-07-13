@@ -1,0 +1,30 @@
+---
+import Icon from '@/components/Icon.astro';
+
+const items = [
+  { icon: "badge-check", title: "Licensed & Insured", text: "Fully certified insulation crews" },
+  { icon: "piggy-bank", title: "Free Estimates", text: "No-cost, no-obligation quotes" },
+  { icon: "clock", title: "Fast Turnaround", text: "Most jobs done in a day" },
+  { icon: "map-pin", title: "Gulf Coast Local", text: "Serving the panhandle for 20+ years" },
+]
+---
+
+<section class="border-y border-border bg-card">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {items.map((item) => (
+        <div class="flex items-start gap-3">
+          <div class="w-11 h-11 shrink-0 rounded-md bg-primary/15 flex items-center justify-center">
+            <Icon name={item.icon} class="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <p class="font-heading uppercase tracking-wide text-base text-foreground leading-tight">
+              {item.title}
+            </p>
+            <p class="text-sm text-muted-foreground mt-0.5">{item.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
