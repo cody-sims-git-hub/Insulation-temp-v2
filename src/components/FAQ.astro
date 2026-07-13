@@ -1,0 +1,51 @@
+---
+import type { FaqItem } from "@/data/site";
+import { homeFaqs } from "@/data/faqs";
+import Icon from "@/components/Icon.astro";
+
+interface Props {
+  faqs?: FaqItem[];
+  heading?: string;
+  intro?: string;
+}
+
+const { faqs = homeFaqs, heading = "Frequently asked questions", intro } = Astro.props;
+---
+
+<section id="faq" class="py-20 md:py-28">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+        <span class="text-sm uppercase tracking-widest text-primary font-semibold">FAQ</span>
+      </div>
+      <h2 class="font-heading uppercase text-3xl md:text-5xl text-foreground mb-5 text-balance leading-tight">
+        {heading}
+      </h2>
+      <p class="text-lg text-muted-foreground">
+        {intro ? (
+          <Fragment set:html={intro} />
+        ) : (
+          <>
+            Have a question that isn&apos;t answered here? Call us at{" "}
+            <a href="tel:8502092636" class="text-primary font-semibold">850-209-2636</a>.
+          </>
+        )}
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      {faqs.map((faq, index) => (
+        <details class="border border-border rounded-xl overflow-hidden bg-card group" open={index === 0}>
+          <summary class="w-full flex items-center justify-between p-6 text-left cursor-pointer list-none">
+            <span class="text-lg font-semibold text-foreground pr-4">{faq.question}</span>
+            <Icon name="chevron-down" class="w-5 h-5 text-primary shrink-0 transition-transform duration-200 group-open:rotate-180" />
+          </summary>
+          <div class="overflow-hidden">
+            <p class="px-6 pb-6 text-muted-foreground leading-relaxed">{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

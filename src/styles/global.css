@@ -132,3 +132,7 @@
     font-family: var(--font-heading);
   }
 }
+
+summary::-webkit-details-marker {
+  display: none;
+}
