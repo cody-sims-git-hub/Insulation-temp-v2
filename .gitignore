@@ -33,3 +33,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts/node_modules/
+
+# SDD process scratch (ledger, review packages, task briefs)
+.superpowers/
