@@ -67,9 +67,10 @@ src/
   data/
     site.ts               ← lib/site-config.ts business/NAP block (verbatim values)
     faqs.ts               ← lib/faqs.ts (verbatim)
-  styles/global.css       ← app/globals.css VERBATIM (Tailwind v4 @theme tokens,
-                          fonts, .btn/utility layers)
+  lib/utils.ts            ← lib/utils.ts (cn(), used by Button.astro)
+  styles/global.css       ← app/globals.css VERBATIM + :root font-var wiring (below)
   components/
+    ui/Button.astro       ← components/ui/button.tsx (same buttonVariants cva)
     Icon.astro            inline-SVG icon (reproduces the used Lucide glyphs by name)
     Header.astro          ← components/header.tsx — static markup + inline <script>
                             reproducing the current inline mobile-menu dropdown toggle
@@ -97,10 +98,15 @@ public/                   all current assets (images, favicons, og.jpg) unchange
 .github/workflows/deploy.yml   updated: astro check + rsync ./dist/
 ```
 
-Note: `lib/utils.ts` (`cn()`) is dropped — it exists for React `className`
-merging; static `.astro` markup uses literal class strings. No `shadcn/ui`
-component files carry over; the handful actually used (Button, etc.) are
-reproduced as plain HTML elements with their exact current class strings.
+Note on `Button` and `cn()`: `class-variance-authority`, `clsx`, and
+`tailwind-merge` are plain TypeScript (not React), so they are **kept**.
+`lib/utils.ts` (`cn()`) → `src/lib/utils.ts`, and the one heavily-used shadcn
+component, `Button` (15 call sites), is ported to `src/components/ui/Button.astro`
+reusing the **identical `buttonVariants` cva** from the current `button.tsx`. This
+guarantees byte-identical button classes across every call site with zero
+framework runtime — safer than hand-merging 15 `cva`+`tailwind-merge` results into
+literal strings. `Button.astro` renders `<a>` when given `href`, else `<button>`.
+No other shadcn/ui files carry over.
 
 ## Interactivity (no framework, near-zero JS)
 
@@ -113,13 +119,16 @@ one native element:
 | Mobile menu | `header.tsx` `useState` | `Header.astro` — reproduce the **current inline dropdown** markup; toggle open/closed via a small inline `<script>` (show/hide + swap Menu/X icon) |
 | Contact form | `contact-form.tsx` `useState` | `ContactForm.astro` — inline `<script>` on submit: `preventDefault`, hide form, show the existing "Message sent" panel. Submits nowhere (unchanged). |
 | FAQ accordion | `faq.tsx` `useState` | **native `<details>`/`<summary>`** in `FAQ.astro` — zero JS |
-| Testimonials | `testimonials.tsx` (client) | static `Testimonials.astro` — interactivity is decorative; render static |
-| CTA | `cta.tsx` (client) | static `CTA.astro` — render static |
+| Testimonials | `testimonials.tsx` `useState` carousel | `Testimonials.astro` — carousel is load-bearing (prev/next/dots cycle 4 reviews); reproduce with a small inline `<script>` (show/hide slides, wire buttons) |
+| CTA | `cta.tsx` `useState` form | `CTA.astro` — has the same fake-submit lead form; inline `<script>` submit→success swap, same as ContactForm |
 
-- **Icons:** current components import `lucide-react`. With no React, the used
-  glyphs (Menu, X, Phone, Check, ChevronDown, ShieldCheck, Users, ThumbsUp, Clock,
-  Award, Leaf, MapPin, Mail, CheckCircle2, etc.) are reproduced as **inline SVG**
-  via `Icon.astro`, copying Lucide's exact path data so they render identically.
+- **Icons:** current components import `lucide-react` (28 unique glyphs: Menu, X,
+  Phone, Check, ChevronDown, Star, ArrowLeft, ArrowRight, Quote, Home, Layers,
+  Wind, Building2, PaintRoller, DoorClosed, Hammer, Trash2, ShieldCheck, Users,
+  ThumbsUp, Clock, Award, Leaf, MapPin, Mail, CheckCircle2, BadgeCheck, PiggyBank).
+  With no React, they are reproduced as **inline SVG** via `Icon.astro`, sourced
+  from the `lucide-static` package (dev-only) so path data / viewBox / stroke match
+  the current output exactly.
 - **FAQ** open/closed styling is reproduced with `<details open>` on the first
   item plus CSS (`details[open]` marker rotation) to match the current
   chevron/expand look pixel-for-pixel.
@@ -145,22 +154,39 @@ generator functions are dropped, the data is not.
 
 ## Fonts
 
-Google Fonts `<link>` for Inter + Oswald in `Layout.astro` (simplest; matches
-osaka). Wire to the same CSS variables `global.css` already declares
-(`--font-inter`, `--font-oswald`) so nothing downstream changes.
+Google Fonts `<link>` for Inter + Oswald in `Layout.astro` (simplest). Critical
+detail: `global.css`'s `@theme inline` block reads `var(--font-inter)` and
+`var(--font-oswald)` — variables that `next/font` injected on `:root` today. With
+no next/font, `global.css` must **define those variables on `:root`** pointing at
+the Google-loaded families, e.g.:
+
+```css
+:root {
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-oswald: "Oswald", "Inter", ui-sans-serif, sans-serif;
+  /* ...existing tokens unchanged... */
+}
+```
+
+Without this the `font-sans` / `font-heading` tokens collapse to fallback fonts —
+the single most likely pixel-perfect regression. The `@theme inline` block itself
+is copied verbatim.
 
 ## Dependencies
 
-**Add (that's all):** `astro`, `@astrojs/check`, `@tailwindcss/vite`,
-`tailwindcss` v4, `typescript`, `@types/node`.
+**Keep:** `class-variance-authority`, `clsx`, `tailwind-merge` (plain TS, power
+`Button.astro`), `tailwindcss` v4, `tw-animate-css` (`global.css` imports it),
+`typescript`, `@types/node`.
+
+**Add:** `astro`, `@astrojs/check`, `@tailwindcss/vite`, `lucide-static` (dev-only
+icon SVG source).
 
 **Remove:** `next`, `next-themes`, `@vercel/analytics`, `react`, `react-dom`,
-`@astrojs/react` (never added), `lucide-react`, `autoprefixer`, `postcss`,
-`@tailwindcss/postcss`, `clsx`, `tailwind-merge`, `class-variance-authority`,
+`lucide-react`, `autoprefixer`, `postcss`, `@tailwindcss/postcss`,
 `@hookform/resolvers`, `react-hook-form`, `zod`, and **all** `@radix-ui/*` /
-shadcn packages (~50 total). Nothing React-related remains.
+remaining shadcn runtime packages (~48 total). No React runtime remains.
 
-This is a near-total dependency wipe: from ~60 packages to ~6.
+This is a near-total dependency wipe: from ~60 packages to ~9.
 
 ## Deploy (unchanged target, new output dir)
 
