@@ -1,0 +1,121 @@
+---
+import Icon from '@/components/Icon.astro';
+
+const serviceLinks = [
+  "Spray Foam",
+  "Blown Fiberglass",
+  "Mobile Home Insulation",
+  "Wall Spray Cellulose",
+  "Blown Cellulose",
+  "Roll & Batt",
+]
+
+const companyLinks = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+  { label: "Service Area", href: "/service-area" },
+  { label: "Contact", href: "/contact" },
+]
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-background border-t border-border py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      {/* Brand */}
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="inline-flex items-center mb-4" aria-label="A Plus Insulation — home">
+          <img src="/aplus-logo-cropped.jpg" alt="A Plus Insulation" class="h-12 w-auto rounded-md object-contain" />
+        </a>
+        <p class="text-muted-foreground text-sm mb-5 max-w-xs">
+          For all your insulation needs. Reduce your power bills with professional insulation across the Gulf Coast.
+        </p>
+        <div class="space-y-2 text-sm">
+          <a href="tel:8505550199" class="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+            <Icon name="phone" class="w-4 h-4 text-primary" />
+            850-555-0199
+          </a>
+          <a
+            href="mailto:info@example.com"
+            class="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+          >
+            <Icon name="mail" class="w-4 h-4 text-primary" />
+            info@example.com
+          </a>
+          <p class="flex items-center gap-2 text-muted-foreground">
+            <Icon name="map-pin" class="w-4 h-4 text-primary" />
+            Serving the Gulf Coast &amp; FL Panhandle
+          </p>
+        </div>
+      </div>
+
+      {/* Services */}
+      <div>
+        <h3 class="font-heading uppercase tracking-wide text-base mb-4 text-foreground">Services</h3>
+        <ul class="space-y-3 text-sm">
+          {serviceLinks.map((link) => (
+            <li>
+              <a href="/services" class="text-muted-foreground hover:text-primary transition-colors">
+                {link}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Company */}
+      <div>
+        <h3 class="font-heading uppercase tracking-wide text-base mb-4 text-foreground">Company</h3>
+        <ul class="space-y-3 text-sm">
+          {companyLinks.map((link) => (
+            <li>
+              <a href={link.href} class="text-muted-foreground hover:text-primary transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Hours */}
+      <div>
+        <h3 class="font-heading uppercase tracking-wide text-base mb-4 text-foreground">Hours</h3>
+        <ul class="space-y-3 text-sm text-muted-foreground">
+          <li class="flex justify-between gap-4">
+            <span>Mon – Fri</span>
+            <span class="text-foreground">7am – 6pm</span>
+          </li>
+          <li class="flex justify-between gap-4">
+            <span>Saturday</span>
+            <span class="text-foreground">8am – 2pm</span>
+          </li>
+          <li class="flex justify-between gap-4">
+            <span>Sunday</span>
+            <span class="text-foreground">Closed</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-muted-foreground">
+        © {currentYear} A Plus Insulation. All rights reserved.
+      </p>
+      <p class="text-sm text-muted-foreground">Licensed &amp; Insured · Free Estimates</p>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-muted-foreground">
+      Powered by{" "}
+      <a
+        href="https://simsdigitalpartners.com"
+        target="_blank"
+        rel="noopener"
+        class="font-medium underline underline-offset-4 hover:text-primary transition-colors"
+      >
+        Sims Digital Partners
+      </a>
+    </p>
+  </div>
+</footer>

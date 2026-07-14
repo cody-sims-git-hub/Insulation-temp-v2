@@ -1,0 +1,78 @@
+---
+import Icon from '@/components/Icon.astro';
+
+const services = [
+  {
+    icon: "wind",
+    title: "Spray Foam",
+    description: "High-performance open and closed-cell spray foam that seals gaps and maximizes energy efficiency.",
+  },
+  {
+    icon: "layers",
+    title: "Blown Fiberglass",
+    description: "Blown-in fiberglass for attics and walls that adds consistent R-value coverage fast.",
+  },
+  {
+    icon: "home",
+    title: "Mobile Home Insulation",
+    description: "Specialized insulation solutions built for manufactured and mobile homes.",
+  },
+  {
+    icon: "paint-roller",
+    title: "Wall Spray Cellulose",
+    description: "Dense-pack cellulose sprayed into walls for superior thermal and sound control.",
+  },
+  {
+    icon: "building-2",
+    title: "Blown Cellulose",
+    description: "Eco-friendly blown cellulose that fills every cavity for lower energy loss.",
+  },
+  {
+    icon: "layers",
+    title: "Roll & Batt",
+    description: "Traditional roll-batt insulation for attics, walls, floors, and crawl spaces.",
+  },
+  {
+    icon: "door-closed",
+    title: "Garage Doors",
+    description: "Insulated garage door solutions to cut heat transfer in your garage.",
+  },
+  {
+    icon: "trash-2",
+    title: "Drywall Removal & Disposal",
+    description: "Full drywall removal and clean disposal to prep your space for new insulation.",
+  },
+]
+---
+
+<section id="services" class="py-20 md:py-28">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mb-14">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <Icon name="hammer" class="w-4 h-4 text-primary" />
+        <span class="text-sm uppercase tracking-widest text-primary font-semibold">Our Services</span>
+      </div>
+      <h2 class="font-heading uppercase text-3xl md:text-5xl text-foreground mb-5 text-balance leading-tight">
+        Complete insulation services for every job
+      </h2>
+      <p class="text-lg text-muted-foreground text-pretty">
+        From new construction to retrofits, A Plus Insulation handles residential, mobile home, and commercial
+        projects across the Gulf Coast.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {services.map((service) => (
+        <div
+          class="group p-6 rounded-xl bg-card border border-border hover:border-primary transition-colors duration-300"
+        >
+          <div class="w-12 h-12 rounded-md bg-primary/15 flex items-center justify-center mb-5 group-hover:bg-primary transition-colors">
+            <Icon name={service.icon} class="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
+          </div>
+          <h3 class="font-heading uppercase tracking-wide text-lg text-foreground mb-2">{service.title}</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

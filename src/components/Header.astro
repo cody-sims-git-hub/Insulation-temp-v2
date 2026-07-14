@@ -1,0 +1,108 @@
+---
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/ui/Button.astro';
+
+const navLinks = [
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/service-area", label: "Service Area" },
+  { href: "/contact", label: "Contact" },
+]
+---
+
+<header class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      {/* Logo */}
+      <a href="/" class="flex items-center" aria-label="A Plus Insulation — home">
+        <img
+          src="/aplus-logo-cropped.jpg"
+          alt="A Plus Insulation"
+          class="h-11 w-auto md:h-14 rounded-md object-contain"
+        />
+      </a>
+
+      {/* Desktop Navigation */}
+      <nav class="hidden lg:flex items-center gap-8">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      {/* CTA */}
+      <div class="hidden md:flex items-center gap-3">
+        <a
+          href="tel:8505550199"
+          class="flex items-center gap-2 text-foreground font-heading text-lg tracking-wide hover:text-primary transition-colors"
+        >
+          <Icon name="phone" class="w-4 h-4 text-primary" />
+          850-555-0199
+        </a>
+        <Button
+          href="/contact"
+          class="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-5 text-sm font-semibold uppercase tracking-wide"
+        >
+          Free Estimate
+        </Button>
+      </div>
+
+      {/* Mobile menu button */}
+      <button
+        id="menu-toggle"
+        class="lg:hidden p-2 text-foreground"
+        aria-label="Toggle menu"
+      >
+        <Icon name="menu" class="w-6 h-6" data-menu-icon="open" />
+        <Icon name="x" class="w-6 h-6 hidden" data-menu-icon="close" />
+      </button>
+    </div>
+
+    {/* Mobile Navigation */}
+    <div id="mobile-menu" class="lg:hidden py-4 border-t border-border hidden">
+      <nav class="flex flex-col gap-4">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium uppercase tracking-wide text-muted-foreground hover:text-primary"
+          >
+            {link.label}
+          </a>
+        ))}
+        <div class="flex flex-col gap-3 pt-4">
+          <a
+            href="tel:8505550199"
+            class="flex items-center gap-2 text-foreground font-heading text-lg tracking-wide"
+          >
+            <Icon name="phone" class="w-4 h-4 text-primary" />
+            850-555-0199
+          </a>
+          <Button
+            href="/contact"
+            class="bg-primary text-primary-foreground rounded-md font-semibold uppercase tracking-wide"
+          >
+            Free Estimate
+          </Button>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const openIcon = document.querySelector('[data-menu-icon="open"]');
+  const closeIcon = document.querySelector('[data-menu-icon="close"]');
+  function setOpen(open: boolean) {
+    menu?.classList.toggle('hidden', !open);
+    openIcon?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+  }
+  toggle?.addEventListener('click', () => setOpen(menu?.classList.contains('hidden') ?? false));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>

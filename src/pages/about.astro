@@ -1,0 +1,156 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import PageHero from '@/components/PageHero.astro';
+import FAQ from '@/components/FAQ.astro';
+import CTA from '@/components/CTA.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { aboutFaqs } from '@/data/faqs';
+
+const stats = [
+  { value: "20+", label: "Years in business" },
+  { value: "2,500+", label: "Homes insulated" },
+  { value: "100%", label: "Licensed & insured" },
+  { value: "5★", label: "Average review" },
+]
+
+const values = [
+  {
+    icon: "shield-check",
+    title: "Licensed & Insured",
+    body: "Every job is completed by trained, insured professionals who treat your home with respect.",
+  },
+  {
+    icon: "thumbs-up",
+    title: "Honest Estimates",
+    body: "Free, transparent quotes with no pressure and no hidden fees — ever.",
+  },
+  {
+    icon: "clock",
+    title: "On-Time, Every Time",
+    body: "We show up when we say we will and finish the job on schedule.",
+  },
+  {
+    icon: "award",
+    title: "Quality Materials",
+    body: "We only install trusted, high-performance insulation products built to last.",
+  },
+  {
+    icon: "leaf",
+    title: "Energy Savings",
+    body: "Our whole goal: a more comfortable home and a lower power bill for your family.",
+  },
+  {
+    icon: "users",
+    title: "Local & Family Owned",
+    body: "We live and work here on the Gulf Coast, and we stand behind every install.",
+  },
+]
+---
+
+<Layout
+  title="About Our Gulf Coast Insulation Team"
+  description="A Plus Insulation is a locally owned, licensed and insured insulation contractor serving Panama City and the Florida Panhandle for 20+ years. Meet our team and values."
+>
+  <div class="min-h-screen bg-background">
+    <Header />
+    <main>
+    <PageHero
+      eyebrow="about"
+      title={'Your local <span class="text-primary">insulation</span> experts'}
+      description="A Plus Insulation was built on a simple promise: quality work, fair prices, and lower power bills for every customer we serve."
+    />
+
+    {/* Story */}
+    <section class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div class="overflow-hidden rounded-2xl border border-border">
+            <img
+              src="/aplus-hero-trucks.jpg"
+              alt="A Plus Insulation branded service trucks parked in front of a coastal home"
+              class="w-full h-80 md:h-[28rem] object-cover"
+            />
+          </div>
+          <div>
+            <span class="text-sm uppercase tracking-widest text-primary font-semibold">Our Story</span>
+            <h2 class="font-heading uppercase text-3xl md:text-4xl text-foreground mt-4 mb-5 text-balance leading-tight">
+              For all your insulation needs
+            </h2>
+            <div class="space-y-4 text-lg text-muted-foreground text-pretty">
+              <p>
+                We started A Plus Insulation to give Gulf Coast homeowners a contractor they could actually count on —
+                one that answers the phone, shows up on time, and does the job right the first time.
+              </p>
+              <p>
+                From spray foam and blown-in fiberglass to cellulose, roll & batt, and mobile home insulation, our
+                fully equipped crews handle projects of every size. We take pride in clean job sites, quality
+                materials, and real energy savings you can feel.
+              </p>
+              <p>
+                Today our trucks are a familiar sight across the region, and our reputation is built one satisfied
+                neighbor at a time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Stats */}
+    <section class="border-y border-border bg-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {stats.map((stat) => (
+            <div class="text-center">
+              <p class="font-heading text-4xl md:text-5xl text-primary mb-1">{stat.value}</p>
+              <p class="text-sm uppercase tracking-wide text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Values */}
+    <section class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <span class="text-sm uppercase tracking-widest text-primary font-semibold">Why Homeowners Trust Us</span>
+          <h2 class="font-heading uppercase text-3xl md:text-5xl text-foreground mt-4 text-balance leading-tight">
+            Built on doing right by our neighbors
+          </h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {values.map((value) => (
+            <div
+              class="group p-6 rounded-xl bg-card border border-border hover:border-primary transition-colors duration-300"
+            >
+              <div class="w-12 h-12 rounded-md bg-primary/15 flex items-center justify-center mb-5 group-hover:bg-primary transition-colors">
+                <Icon name={value.icon} class="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors" />
+              </div>
+              <h3 class="font-heading uppercase tracking-wide text-lg text-foreground mb-2">{value.title}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{value.body}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-12">
+          <Button
+            href="/contact"
+            size="lg"
+            class="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-8 py-6 font-semibold uppercase tracking-wide"
+          >
+            Work With Us
+          </Button>
+        </div>
+      </div>
+    </section>
+
+    <FAQ faqs={aboutFaqs} heading="About A Plus Insulation" />
+
+    <CTA />
+    </main>
+    <Footer />
+  </div>
+</Layout>

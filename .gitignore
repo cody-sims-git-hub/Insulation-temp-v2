@@ -7,6 +7,10 @@
 /.next/
 /out/
 
+# astro
+dist/
+.astro/
+
 # production
 /build
 
@@ -28,4 +32,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts/node_modules/
+next-env.d.ts
+
+# SDD process scratch (ledger, review packages, task briefs)
+.superpowers/
