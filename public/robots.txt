@@ -1,2 +1,7 @@
+# Crawling is allowed ON PURPOSE. This demo is kept out of search by the
+# `X-Robots-Tag: noindex` header (public/_headers) and the robots meta tag. A
+# `Disallow: /` here would stop crawlers from ever fetching a page to read that
+# noindex, so a linked URL could still be indexed ("Indexed, though blocked by
+# robots.txt").
 User-agent: *
-Disallow: /
+Allow: /

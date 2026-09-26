@@ -1,10 +1,10 @@
 // Central business (NAP) + SEO config. Single source of truth for metadata and
 // structured data across the site. This drives canonical + Open Graph / share
-// previews, so it must match where the site is actually served. It currently
-// lives on the aplus2 preview subdomain; when it goes live on its own domain,
-// update this to the production URL.
+// previews, so it must match where the site is actually served: the
+// insulation-demo-2 portfolio subdomain on Cloudflare (wrangler.jsonc). Update
+// both if it moves to its own domain.
 
-export const SITE_URL = "https://aplus2.simsdigitalpartners.com"
+export const SITE_URL = "https://insulation-demo-2.simsdigitalpartners.com"
 
 export const business = {
   name: "A Plus Insulation",

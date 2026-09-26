@@ -1,0 +1,12 @@
+# Cloudflare Workers Static Assets response headers.
+
+# Portfolio/demo site: reachable from simsdigitalpartners.com or a direct link,
+# never from search. Sent on every response (pages AND images), which a <meta>
+# tag can't cover. robots.txt must NOT disallow crawling, or crawlers never
+# fetch a page to see this header.
+/*
+  X-Robots-Tag: noindex
+
+# Astro's build output is content-hashed, so it can be cached forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

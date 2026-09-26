@@ -1,0 +1,26 @@
+// Cloudflare Workers Static Assets — A Plus Insulation demo (v2).
+// SDP standard host for static sites (sdp-starter-kit deploy-placement). There
+// is no Worker script: `dist/` is served straight from Cloudflare's edge.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "insulation-demo-2",
+  "compatibility_date": "2026-09-26",
+
+  "assets": {
+    "directory": "./dist",
+    // Matches how this site's own links are written, so navigation never
+    // takes an extra redirect hop.
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+
+  // Replaces the old Hostinger preview at aplus2.simsdigitalpartners.com; that hostname 301s here via a
+  // Cloudflare Redirect Rule (zone-level; see README → Hosting).
+  // `wrangler deploy` creates this Custom Domain (DNS record + certificate) on
+  // the simsdigitalpartners.com zone and keeps it attached.
+  "routes": [{ "pattern": "insulation-demo-2.simsdigitalpartners.com", "custom_domain": true }],
+
+  // Served only on the Custom Domain — no duplicate *.workers.dev copy.
+  "workers_dev": false,
+  "preview_urls": false
+}

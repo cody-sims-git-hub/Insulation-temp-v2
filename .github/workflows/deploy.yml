@@ -1,20 +1,16 @@
 # =============================================================================
-#  Hostinger static-site deploy — GitHub Actions (SFTP/rsync over SSH)
-#  Generated from ~/workspace/deploy-playbook/deploy.yml.template
+#  Cloudflare Workers Static Assets deploy — GitHub Actions
+#  SDP standard for static sites (sdp-starter-kit → operations/deploy-placement).
+#  Serves dist/ from Cloudflare's edge on the Custom Domain in wrangler.jsonc
+#  (insulation-demo-2.simsdigitalpartners.com); `wrangler deploy` also creates that domain's DNS
+#  record + certificate. Every deploy is atomic, so there's no cache to purge.
 #
-#  Placeholders substituted by setup-deploy.sh (or fill in by hand). Tokens are
-#  wrapped in double braces in the body below; documented here without braces so
-#  they are not themselves substituted:
-#    BUILD_CMD      build command            e.g. npm run build
-#    BUILD_OUTPUT   static output dir        e.g. build/client | dist | out
-#    DOMAIN         live domain folder       e.g. example.com
-#    NODE_VERSION   node major version       e.g. 22
-#    BUILD_ENV      build-time env lines (omitted if none)
-#
-#  Requires ONE repo secret: SSH_PRIVATE_KEY (the shared Hostinger deploy key).
-#  Host / port / user are the shared managed server — not sensitive, so inline.
+#  Requires ONE repo secret: CLOUDFLARE_WORKERS_TOKEN — an API token with
+#  Account · Workers Scripts: Edit and Zone (simsdigitalpartners.com) · Workers
+#  Routes: Edit. Optional repo Variable CLOUDFLARE_ACCOUNT_ID, needed only if
+#  that token can see more than one account.
 # =============================================================================
-name: Deploy to Hostinger
+name: Deploy to Cloudflare
 on:
   push:
     branches: [main]
@@ -28,7 +24,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Lightweight gates — runs on PRs AND main pushes (no build here).
+  # Gates — runs on PRs AND main pushes.
   validate:
     runs-on: ubuntu-latest
     steps:
@@ -37,9 +33,14 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run build
+      # Validates wrangler.jsonc, _headers and the asset bundle without
+      # uploading anything (needs no Cloudflare credentials).
+      - name: Wrangler dry run
+        run: npx wrangler deploy --dry-run
       - run: npm audit --omit=dev --audit-level=critical
 
-  # Build + publish to Hostinger — main push ONLY, never PRs or branches.
+  # Build + publish to Cloudflare — main push ONLY, never PRs or branches.
   deploy:
     needs: validate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -51,28 +52,29 @@ jobs:
       - run: npm ci
       - name: Build site
         run: npm run build
-      # Publish over SFTP (SSH) rather than plain FTP/FTPS — Hostinger's FTP
-      # control socket times out intermittently from GitHub runners, whereas SSH
-      # on port 65002 is reliable. rsync --delete keeps the docroot an exact
-      # mirror of the build output (no stale files, no sync-state file).
-      - name: Deploy build to Hostinger over SFTP
+      - name: Deploy to Cloudflare Workers
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: "5.183.10.166"
-          SSH_PORT: "65002"
-          SSH_USER: "u811108183"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_WORKERS_TOKEN }}
+          ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
-          mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          # Deploy target is the preview subdomain aplus2.simsdigitalpartners.com,
-          # served from public_html/preview-sites/aplus2/. --delete mirrors the
-          # build; exclude .well-known so host-managed ACME/SSL files survive.
-          # (When this site goes live on its own domain, repoint this to
-          #  domains/<domain>/public_html/.)
-          rsync -az --delete --exclude='.well-known/' \
-            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
-            ./dist/ \
-            "$SSH_USER@$SSH_HOST:domains/simsdigitalpartners.com/public_html/preview-sites/aplus2/"
+          # Only pass an account when one is configured; otherwise Wrangler
+          # uses the single account the token can access.
+          if [ -n "$ACCOUNT_ID" ]; then export CLOUDFLARE_ACCOUNT_ID="$ACCOUNT_ID"; fi
+          npx wrangler deploy
+      # Smoke test: the live domain answers and carries the noindex header. A
+      # warning, not a failure: on the very first deploy the new certificate can
+      # take a few minutes to issue even though the deploy itself succeeded.
+      - name: Smoke test insulation-demo-2.simsdigitalpartners.com
+        continue-on-error: true
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            headers="$(curl -sS -D- -o /dev/null https://insulation-demo-2.simsdigitalpartners.com/ || true)"
+            if printf '%s' "$headers" | head -n1 | grep -q ' 200' \
+               && printf '%s' "$headers" | grep -qi '^x-robots-tag: .*noindex'; then
+              echo "https://insulation-demo-2.simsdigitalpartners.com/ is live and noindexed."; exit 0
+            fi
+            sleep 20
+          done
+          echo "::warning::https://insulation-demo-2.simsdigitalpartners.com/ did not return 200 + X-Robots-Tag: noindex yet — check it by hand."
+          exit 1

@@ -46,3 +46,27 @@ and structured data. Copy `.env.example` to `.env.local` and set:
 ## Preview
 
 ![A Plus Insulation home page](docs/screenshot-home.jpg)
+
+## Hosting
+
+Served by **Cloudflare Workers Static Assets** at `https://insulation-demo-2.simsdigitalpartners.com`: config in
+`wrangler.jsonc`, headers in `public/_headers`. There's no server: `dist/` is
+uploaded as-is and served from Cloudflare's edge.
+
+- **Deploy:** push to `main` → GitHub Actions (`.github/workflows/deploy.yml`)
+  typechecks, builds and runs `wrangler deploy`, which also keeps the Custom
+  Domain, its DNS record and certificate in place. PRs run the same checks plus
+  `wrangler deploy --dry-run`, with no upload.
+- **One-time setup:** repo secret `CLOUDFLARE_WORKERS_TOKEN` (API token with
+  *Account · Workers Scripts: Edit* and *Zone simsdigitalpartners.com · Workers
+  Routes: Edit*).
+- **Not in search, on purpose:** this is a portfolio/demo site. Every response
+  carries `X-Robots-Tag: noindex`, so it's only reachable from
+  simsdigitalpartners.com or a direct link. Don't add `Disallow` to robots.txt;
+  it would stop crawlers from reading the noindex.
+
+**Old address:** this site used to be the Hostinger preview at `aplus2.simsdigitalpartners.com`. That
+hostname 301-redirects here through a Cloudflare **Redirect Rule** (dashboard →
+simsdigitalpartners.com → Rules → Redirect Rules), so links already shared keep
+working. Its DNS record must stay **proxied (orange cloud)** for the rule to fire.
+Delete the rule and the record once the old links no longer matter.

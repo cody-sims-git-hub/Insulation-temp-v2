@@ -36,3 +36,6 @@ next-env.d.ts
 
 # SDD process scratch (ledger, review packages, task briefs)
 .superpowers/
+
+# Wrangler local state
+.wrangler/

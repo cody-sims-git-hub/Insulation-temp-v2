@@ -12,18 +12,19 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.2.0",
+    "astro": "^7.3.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.0",
+    "@astrojs/check": "^0.9.10",
     "@tailwindcss/vite": "^4.0.0",
     "@types/node": "^22",
     "lucide-static": "^0.454.0",
     "tailwindcss": "^4.0.0",
     "tw-animate-css": "^1.3.3",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "wrangler": "^4.141.0"
   }
 }
